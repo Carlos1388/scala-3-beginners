@@ -3,27 +3,29 @@ package com.rockthejvm.part1basics
 object ValuesAndTypes {
 
   // values
-  val meaningOfLife: Int = 42 // const int meaningOfLife = 42
+  val meaningOfLife: Int = 42
 
-  // reassigning is not allowed
-  // meaningOfLife = 45
+  // assigning --> is not allowed
+  //meaningOfLife = 45 // illegal
 
-  // type inferrence
-  val anInteger = 67 // : Int is optional
+  val anInteger = 67 // : Int is optional (X-rays gives hints based on compiler)
 
-  // common types
-  val aBoolean: Boolean = false
-  val aChar: Char = 'a'
-  val anInt: Int = 78 // 4 bytes
-  val aShort: Short = 5263 // 2 bytes
-  val aLong: Long = 52789572389234L // 8 bytes
-  val aFloat: Float = 2.4f // 4 bytes
-  val aDouble: Double = 3.14 // 8 bytes
+  // common types - essential types
+  val aBooleanValueF: Boolean = false
+  val aBooleanValueT: Boolean = true
 
-  // string
-  val aString: String = "Scala"
+  val aChar: Char = 'a' // single quotes
+
+  val anInt: Int =78 // 32 bit == 4 bytes
+  val aShorts: Short = 5367 // 16 bit == 2 bytes
+  val aLong: Long = 5278477878728974L // L for long number, 64 bits == 8 bytes
+  val aFloat: Float = 2.4f // 4 bytes fp
+  val aDouble: Double = 3.14 // any suffix at the end, is 8 bytes fp
+
+  val aString: String = "Double Quotes" // single quotes != double quotes
 
   def main(args: Array[String]): Unit = {
 
   }
+
 }
