@@ -42,6 +42,29 @@ import scala.annotation.tailrec
 
 
 // version 2, after lesson 17
+// version 3 after lesson 18
+
+trait Predicate[T] {
+  def test(element: T): Boolean
+}
+
+class EvenPredicate extends Predicate[Int] {
+  override def test(element: Int): Boolean = element % 2 == 0
+}
+
+
+trait Transformer[A, B] {
+  def transform(value: A): B
+}
+
+class Doubler extends Transformer[Int, Int] {
+  override def transform(value: Int): Int = value * 2
+}
+
+class DoublerList extends Transformer[Int, LList[Int]] {
+  override def transform(value: Int): LList[Int] = new Cons[Int](value, new Cons[Int](value +1, new Empty[Int]))
+}
+
 
 abstract class LList[A] {
   def head: A
@@ -53,6 +76,13 @@ abstract class LList[A] {
   def add(element: A): LList[A] = new Cons(element, this)
 
   override def toString: String = super.toString
+
+  // concatenation
+  infix def ++(anotherList: LList[A]): LList[A]
+
+  def map[B](transformer: Transformer[A, B]): LList[B]
+  def filter(predicate: Predicate[A]): LList[A]
+  def flatMap[B](transformer: Transformer[A, LList[B]]): LList[B]
 }
 
 class Empty[A] extends LList[A] {
@@ -63,6 +93,14 @@ class Empty[A] extends LList[A] {
   override def isEmpty: Boolean = true
 
   override def toString: String = "[]"
+
+  override infix def ++(anotherList: LList[A]): LList[A] = anotherList
+
+  def map[B](transformer: Transformer[A, B]): LList[B] = new Empty[B]
+
+  def filter(predicate: Predicate[A]): LList[A] = this
+
+  def flatMap[B](transformer: Transformer[A, LList[B]]): LList[B] = Empty[B]
 }
 
 //class Cons(value: Int, next: LList) extends LList { // cons means "constructor"
@@ -78,28 +116,81 @@ class Cons[A](override val head: A, override val tail: LList[A]) extends LList[A
       else concatenateElements(remainder.tail, s"$acc, ${remainder.head}")
 
     s"[${concatenateElements(this.tail, s"$head")}]"
+    }
+
+  override infix def ++(anotherList: LList[A]): LList[A] = {
+    new Cons[A](head, tail ++ anotherList)
+  }
+
+  override def map[B](transformer: Transformer[A, B]): LList[B] = {
+    new Cons[B](transformer.transform(head), tail.map(transformer))
+  }
+
+  override def filter(predicate: Predicate[A]): LList[A] = {
+    if (predicate.test(head)) new Cons[A](head, tail.filter(predicate))
+    else tail.filter(predicate)
+  }
+
+  override def flatMap[B](transformer: Transformer[A, LList[B]]): LList[B] = {
+    transformer.transform(head) ++ tail.flatMap(transformer)
   }
 }
+
+
+/** EXERCISE: LList Extension - - - - Lesson 18 */
+
+/**
+ * 1- Generic trait Predicate[T] with a method test(T) => Boolean
+ * 2- Generic trait Transformer[A, B] with a method transform(A) => B
+ * 3- LList:
+ *  - map(transformer: Transformer[A, B]) => Llist[B]
+ *  - filter(predicate: Predicate[A]) => Llist[A]
+ *  - flatMap(transformer from A to LList[B]) => LList[B]
+ */
+
 
 object LListTest {
   def main(args: Array[String]): Unit = {
 
     val empty = new Empty[Int]
-
-    println(empty)
-    println(empty.isEmpty)
-
+//
+//    println(empty)
+//    println(empty.isEmpty)
+//
     val first3Numbers = new Cons(1, new Cons(2, new Cons(3, empty)))
+//
+//    println(first3Numbers)
+//
+//    val first3numbers_v2 = empty.add(1).add(2).add(3) // when added, numbers are first in list
+//
+//    println(first3numbers_v2)
+//    println(first3numbers_v2.isEmpty)
+//
+//    val someStrings = new Cons("dog", new Cons("cat", new Empty))
+//
+//    println(someStrings)
 
-    println(first3Numbers)
+    // map testing
+     val evenPredicate = new Predicate[Int] {
+       override def test(element: Int): Boolean =
+         element % 2 == 0
+     }
 
-    val first3numbers_v2 = empty.add(1).add(2).add(3) // when added, numbers are first in list
+     val doubler = new Transformer[Int, Int] {
+       override def transform(value: Int): Int = value * 2
+     }
 
-    println(first3numbers_v2)
-    println(first3numbers_v2.isEmpty)
+     val numbers_doubled = first3Numbers.map(doubler)
+     println(numbers_doubled)
 
-    val someStrings = new Cons("dog", new Cons("cat", new Empty))
+     val doubledList = first3Numbers.map(new DoublerList)
+     println(doubledList)
 
-    println(someStrings)
+    // filter testing
+    val onlyEvenNumbers = first3Numbers.filter(new EvenPredicate)
+    println(onlyEvenNumbers)
+
+    val flattedDoubled = first3Numbers.flatMap(new DoublerList)
+    println(flattedDoubled)
   }
 }
