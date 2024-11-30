@@ -148,6 +148,13 @@ case class Cons[A](override val head: A, override val tail: LList[A]) extends LL
  *  - flatMap(transformer from A to LList[B]) => LList[B]
  */
 
+object LList {
+  def find[A](list: LList[A], predicate: Predicate[A]): A = {
+    if (list.isEmpty) throw new NoSuchElementException()
+    else if (predicate.test(list.head)) list.head
+    else find[A](list.tail, predicate)
+  }
+}
 
 object LListTest {
   def main(args: Array[String]): Unit = {
@@ -192,5 +199,12 @@ object LListTest {
 
     val flattedDoubled = first3Numbers.flatMap(new DoublerList)
     println(flattedDoubled)
+
+    // find test
+    val isfourPredicate = new Predicate[Int] {
+      override def test(element: Int): Boolean = element == 4
+    }
+//    println(LList.find(first3Numbers, isfourPredicate)) // exception
+    println(LList.find(first3Numbers, evenPredicate)) // 2
   }
 }
