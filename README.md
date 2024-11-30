@@ -1,29 +1,12 @@
 
-## The official repository for the Scala 3 & FP Essentials course
+## Personal repository for the Scala 3 & FP Essentials course
 
-Powered by [Rock the JVM!](rockthejvm.com)
+by [Rock the JVM!](rockthejvm.com)
 
 This repository contains the code we wrote during  [Rock the JVM's Scala 3 & FP Essentials course](https://rockthejvm.com/course/scala). Unless explicitly mentioned, the code in this repository is exactly what was caught on camera.
 
-### Installation
+Lessons:
 
-How to install:
-- either clone the repo or download as zip
-- open with IntelliJ as it's a simple IDEA project
-
-### Getting Started
-
-Run this command in a git terminal to reset the code in its starting/clean state:
-
-```
-git checkout start
-```
-
-This repo also has Git tags for intermediate states of the code while we were working in the course. You can check out the appropriate tags for the different stages of the course. Useful especially for longer exercises where we modify the same code over multiple videos.
-
-The tags are:
-
-* `start`
 * `1.1-values-types`
 * `1.2-expressions`
 * `1.3-functions`
@@ -62,10 +45,3 @@ The tags are:
 * `4.3-pattern-matching-everywhere`
 * `4.4-braceless-syntax`
 
-
-### Contributions
-
-If you have changes to suggest to this repo, either
-- submit a GitHub issue
-- tell me in the course Q/A forum
-- submit a pull request!
