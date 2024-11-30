@@ -4,6 +4,7 @@
 by [Rock the JVM!](rockthejvm.com)
 
 This repository contains the code we wrote during  [Rock the JVM's Scala 3 & FP Essentials course](https://rockthejvm.com/course/scala)
+
 Lessons:
 
 * `1.1-values-types`
