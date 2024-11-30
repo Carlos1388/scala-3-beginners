@@ -25,9 +25,9 @@ object PackagesImports { // top-level
   import java.util.{List as JList} // in Scala2 "as" -> "=>"
   val aJavaList: JList[Int] = ???
 
-  // import everything
-  import com.rockthejvm.practice.*
-  val aPredicate: Predicate[Int] = ???
+//  // import everything
+//  import com.rockthejvm.practice.*
+//  val aPredicate: Predicate[Int] = ???
 
   // we can import several symbols in the same line
   import PhysicsConstants.{PLANCK, SPEED_OF_LIGHT, EARTH_GRAVITY}
