@@ -69,11 +69,16 @@ object WhatsAFunction {
     }
   }
 
+//  val suppermult_v2 = (x: Int) => (y: Int) => x * y
+  val suppermult_v2 = (x: Int) => (x * (_: Int)) // same as above but shorter, in video does above as last implementation
+
+
   val mult2 = suppermult(2)
 
   val amultiplication = mult2(7) // 14
   // currying
   val amultiplication_v2 = suppermult(3)(7) // 21
+  val amultiplication_v3 = suppermult_v2(3)(7) // 21
 
   // function values != methods
 
@@ -82,5 +87,6 @@ object WhatsAFunction {
   def main(args: Array[String]): Unit = {
     println(amultiplication)
     println(amultiplication_v2)
+    println(amultiplication_v3)
   }
 }

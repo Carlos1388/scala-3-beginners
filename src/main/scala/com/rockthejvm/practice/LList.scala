@@ -16,9 +16,9 @@ abstract class LList[A] {
   // concatenation
   infix def ++(anotherList: LList[A]): LList[A]
 
-  def map[B](transformer: Function1[A, B]): LList[B]
-  def filter(predicate: Function1[A, Boolean]): LList[A]
-  def flatMap[B](transformer: Function1[A, LList[B]]): LList[B]
+  def map[B](transformer: A => B): LList[B]
+  def filter(predicate: A => Boolean): LList[A]
+  def flatMap[B](transformer: A => LList[B]): LList[B]
 }
 
 case class Empty[A]() extends LList[A] { // having empty of case class means all empties are the same
@@ -32,11 +32,11 @@ case class Empty[A]() extends LList[A] { // having empty of case class means all
 
   override infix def ++(anotherList: LList[A]): LList[A] = anotherList
 
-  def map[B](transformer: Function1[A, B]): LList[B] = new Empty()
+  def map[B](transformer: A => B): LList[B] = new Empty()
 
-  def filter(predicate: Function1[A, Boolean]): LList[A] = this
+  def filter(predicate: A => Boolean): LList[A] = this
 
-  def flatMap[B](transformer: Function1[A, LList[B]]): LList[B] = Empty()
+  def flatMap[B](transformer: A => LList[B]): LList[B] = Empty()
 }
 
 //class Cons(value: Int, next: LList) extends LList { // cons means "constructor"
@@ -58,16 +58,16 @@ case class Cons[A](override val head: A, override val tail: LList[A]) extends LL
     Cons[A](head, tail ++ anotherList)
   }
 
-  override def map[B](transformer: Function1[A, B]): LList[B] = {
+  override def map[B](transformer: A => B): LList[B] = {
     Cons[B](transformer(head), tail.map(transformer))
   }
 
-  override def filter(predicate: Function1[A, Boolean]): LList[A] = {
+  override def filter(predicate: A => Boolean): LList[A] = {
     if (predicate(head)) Cons[A](head, tail.filter(predicate))
     else tail.filter(predicate)
   }
 
-  override def flatMap[B](transformer: Function1[A, LList[B]]): LList[B] = {
+  override def flatMap[B](transformer: A => LList[B]): LList[B] = {
     transformer(head) ++ tail.flatMap(transformer)
   }
 }
@@ -114,38 +114,29 @@ object LListTest {
 //    println(someStrings)
 
     // map testing
-     val evenPredicate = new Function1[Int, Boolean] {
-       override def apply(element: Int): Boolean =
-         element % 2 == 0
-     }
+//     val evenPredicate: Int => Boolean = _ % 2 == 0
+//
+//     val doubler: Int => Int = _ * 2
+//
+//    val doublerList: (Int) => LList[Int] = x => Cons(x, new Cons(x + 1, Empty()))
 
-     val doubler = new Function1[Int, Int] {
-       override def apply(value: Int): Int = value * 2
-     }
-
-    val doublerList = new Function1[Int, LList[Int]] {
-      override def apply(v1: Int): LList[Int] =
-        Cons(v1, new Cons(v1 + 1, new Empty()))
-    }
-
-     val numbers_doubled = first3Numbers.map(doubler)
+     val numbers_doubled = first3Numbers.map(_ * 2)
      println(numbers_doubled)
 
-     val doubledList = first3Numbers.map(doublerList)
+     val doubledList = first3Numbers.map(x => Cons(x, new Cons(x + 1, Empty())))
      println(doubledList)
 
     // filter testing
-    val onlyEvenNumbers = first3Numbers.filter(evenPredicate)
+    val onlyEvenNumbers = first3Numbers.filter(_ % 2 == 0)
     println(onlyEvenNumbers)
 
-    val flattedDoubled = first3Numbers.flatMap(doublerList)
+    val flattedDoubled = first3Numbers.flatMap(x => Cons(x, new Cons(x + 1, Empty())))
     println(flattedDoubled)
 
     // find test
-    val isfourPredicate = new Function1[Int, Boolean] {
-      override def apply(element: Int): Boolean = element == 4
-    }
+    val isfourPredicate: (Int) => Boolean = _ == 4
+
 //    println(LList.find(first3Numbers, isfourPredicate)) // exception
-    println(LList.find(first3Numbers, evenPredicate)) // 2
+    println(LList.find(first3Numbers, _ % 2 == 0)) // 2
   }
 }
