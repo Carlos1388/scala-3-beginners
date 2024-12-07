@@ -58,12 +58,48 @@ object HOFsCurrying {
             1 + 2 = 3
             3 + 3 = 6
             6 + 4 = 10
+
+  2 - toCurry(f: (Int, Int) => Int): Int => Int => Int
+      fromCurry(f: (Int => Int => Int)): (Int, Int) => (Int)
+
+  3 - compose(f, g) => x => f(g(x))
+      andThen(f, g) => x => g(f(x))
    */
+
+  def toCurry[A, B, C](f: (A,B) => C): A => B => C = {
+    (x: A) => (y: B) => f(x,y): C
+  }
+
+  val supperAdder_v2 = toCurry[Int, Int, Int](_ + _) // same as supperAdder
+
+  def fromCurry[A, B, C](f: (A => B => C)): (A, B) => (C) = {
+    (x: A, y: B) => f(x)(y): C
+  }
+
+  val simpleAdder = fromCurry(superAdder)
+
+  def compose[A, B, C](f: Function1[B , C], g: Function1[A, B]) = {
+    (x: A) => f(g(x)): C
+  }
+
+  val incrementer = (x: Int) => x + 1
+  val doubler = (x: Int) => x * 2
+
+  val composedApplication = compose(incrementer, doubler)
+
+  def andThen[A, B, C](f: Function1[A , B], g: Function1[B, C]) = {
+    (x: A) => g(f(x)): C
+  }
+
+  val andthenned = incrementer.andThen(doubler)
 
   def main(args: Array[String]): Unit = {
     println(tenThousand)
     println(tenThousand_v2)
     println(standardFormat(Math.PI))
     println(preciseFormat(Math.PI))
+    println(simpleAdder(2,45))
+    println(composedApplication(5))
+    println(andthenned(5))
   }
 }
