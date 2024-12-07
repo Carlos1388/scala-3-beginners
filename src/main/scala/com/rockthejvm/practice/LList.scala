@@ -20,6 +20,7 @@ abstract class LList[A] {
 
   def map[B](transformer: A => B): LList[B]
   def filter(predicate: A => Boolean): LList[A]
+  def withFilter(predicate: A => Boolean): LList[A] = filter(predicate) // to be able to use for comprehensions with filters
   def flatMap[B](transformer: A => LList[B]): LList[B]
   def foreach(function: A => Unit): LList[A]
   def sort(comparison: (A, A) => Int): LList[A]
