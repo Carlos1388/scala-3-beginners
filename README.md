@@ -5,6 +5,8 @@ by [Rock the JVM!](rockthejvm.com)
 
 This repository contains the code we wrote during  [Rock the JVM's Scala 3 & FP Essentials course](https://rockthejvm.com/course/scala)
 
+[Certificate](certificate-of-completion-for-scala-functional-programming-for-beginners.pdf)
+
 Lessons:
 
 * `1.1-values-types`
@@ -44,5 +46,3 @@ Lessons:
 * `4.2-all-the-patterns`
 * `4.3-pattern-matching-everywhere`
 * `4.4-braceless-syntax`
-
-.
